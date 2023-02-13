@@ -1,28 +1,16 @@
 <?php
 
-require "db.php";
-
-$sql = "SELECT * FROM `news`";
-$result = mysqli_query($connect, $sql);
-
-$posts = array();
-
-foreach ($result as $row) {
-  $posts[] = $row;
-};
+require __DIR__ . '/Pagination.php';
+require __DIR__ . '/database/connect.php';
+require __DIR__ . '/funcs.php';
 
 $page = $_GET['page'];
 $per_page = 5;
-$page_count = ceil(count($posts) / $per_page);
-
-function sort_date($a_new, $b_new)
-{
-  $a_new = $a_new["idate"];
-  $b_new = $b_new["idate"];
-
-  return $b_new - $a_new;
-}
-usort($posts, "sort_date");
+$total = get_count();
+$pagination = new Pagination($page, $per_page, $total);
+$start = $pagination->get_start();
+$count_pages = $pagination->get_count_pages();
+$news = get_news($start, $per_page);
 
 ?>
 
@@ -33,47 +21,50 @@ usort($posts, "sort_date");
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="./css/index.css" />
   <title>Document</title>
 </head>
 
 <body>
-  <section class="container">
+  <div class="container">
     <header>
       <h1>Новости</h1>
     </header>
-    <?php for ($i = $page * $per_page; $i < ($page + 1) * $per_page; $i++) : ?>
-      <?php if ($posts[$i]['id'] != NULL) : ?>
-        <div class="post">
-          <div class="post__header">
-            <?php
-            $now = new DateTimeImmutable();
-            $date = $now->setTimestamp($posts[$i]['idate']);
-            $dateFormat = $date->format('d.m.Y');
-            ?>
-            <p class="post__date"><?= $dateFormat  ?></p>
-            <a href="/view.php?id=<?= $posts[$i]['id'] ?>">
-              <p class="post__title"><?= $posts[$i]['title'] ?></p>
-            </a>
-          </div>
-          <p class="post__announce"><?= $posts[$i]['announce'] ?></p>
+    <div class="post">
+      <?php foreach ($news as $new) {
+      ?>
+        <div class="post_header">
+          <p class="post_date"><?= $new['idate'] = date('d-m-Y',  $new['idate']) ?></p>
+          <?php
+          $item_title = $new['title'];
+          $id = $new['id'];
+          echo "<a class='post_title'  href=\"/view.php?id=$id\">$item_title</a>" ?>
         </div>
-      <?php endif ?>
-    <?php endfor ?>
-    <div class="page__list">
-      <p>Страницы:</p>
-      <?php for ($i = 0; $i < $page_count; $i++) :   ?>
-        <a href='?page=<?= $i ?>'>
-          <button class='
-          <?php if ($page == $i) {
-            echo "page__btn selected";
-          } else {
-            echo "page__btn";
-          } ?>'><?= $i + 1 ?></button>
-        </a>
-      <?php endfor ?>
+        <p class="post_announce"><?= $new['announce'] ?></p>
+      <?php
+
+      } ?>
+
     </div>
-  </section>
+    <footer>
+      <p>Страницы:</p>
+      <?php
+      for ($i = 0; $i < $count_pages; $i++) {
+        $page_number = $i + 1;
+        if ($page == $page_number) {
+          echo "<a class='btn_item active' href=\"/?page=$page_number\">$page_number</a>";
+        } else if (!$page && $i == 0) {
+          echo "<a class = 'btn_item active' href=\"/?page=$page_number\">$page_number</a>";
+        } else {
+          echo "<a class = 'btn_item nonactive' href=\"/?page=$page_number\">$page_number</a>";
+        }
+
+      ?>
+      <?php
+      }
+      ?>
+    </footer>
+  </div>
 </body>
 
 </html>

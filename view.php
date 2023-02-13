@@ -1,16 +1,13 @@
 <?php
-require "db.php";
 
-$id = $_GET['id'];
+require __DIR__ . '/database/connect.php';
+require __DIR__ . '/funcs.php';
 
-$sql = "SELECT * FROM news WHERE id = " . $id;
-$result = mysqli_query($connect, $sql);
-$post = mysqli_fetch_assoc($result);
+$id = $_GET['id'];;
+$single_new = get_single_new($id);
 
-$page = 0;
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,17 +15,23 @@ $page = 0;
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="view.css" />
+  <link rel="stylesheet" href="./css/view.css" />
   <title>Document</title>
 </head>
 
 <body>
   <div class="container">
-    <h2 class="title"><?= $post['title'] ?></h2>
-    <div class="container__content">
-      <div class="content"><?= $post['content'] ?></div>
-    </div>
-    <a href="/?page=<?= $page ?>" class="all__news">Все новости >></a>
+    <?php
+    foreach ($single_new as $new) {
+    ?>
+      <h2 class="title"><?= $new['title'] ?></h2>
+      <div class="container_content">
+        <div class="content"><?= $new['content'] ?></div>
+      </div>
+    <?php
+      echo "<a  href=\"/?page=1\">Все новости >></a>";
+    }
+    ?>
   </div>
 </body>
 

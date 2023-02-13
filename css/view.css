@@ -9,12 +9,8 @@ body {
   background-color: grey;
   height: 100vh;
 }
-p {
-  margin: 0;
-  margin-bottom: 15px;
-}
 
-.container__content {
+.container_content {
   height: fit-content;
   max-height: 500px;
   overflow: hidden;

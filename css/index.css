@@ -14,15 +14,21 @@ p {
 }
 h1 {
   margin: 0;
+  font-size: 30px;
 }
 a:link {
   text-decoration: none;
 }
-
 header {
   margin: 0;
   border-bottom: 1px dotted red;
 }
+
+footer {
+  margin-top: 10px;
+  border-top: 1px dotted red;
+}
+
 .container {
   padding: 20px;
   width: 1060px;
@@ -30,19 +36,17 @@ header {
   height: fit-content;
 }
 
-.post__header {
+.post_header {
   display: flex;
   margin-top: 20px;
   margin-bottom: 5px;
   font-size: 21px;
 }
-
-.post__title {
+.post_title {
   border-bottom: 1px solid blue;
   color: blue;
 }
-
-.post__date {
+.post_date {
   margin-right: 10px;
   height: fit-content;
   padding: 0 3px;
@@ -51,29 +55,26 @@ header {
   color: white;
   border: 0;
 }
-
-.post__announce {
+.post_announce {
   font-size: 18px;
 }
 
-.page__btn {
+.btn_item {
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid #cccecb;
+  text-align: center;
+  margin: 2px;
   width: 35px;
-  border-radius: 0;
-  border: 1px solid gray;
+  font-size: 16px;
 }
 
-.selected {
+.active {
   background-color: brown;
   color: white;
 }
 
-.page__btn:hover {
-  background-color: brown;
-  color: white;
-  cursor: pointer;
-}
-
-.page__list {
-  margin-top: 20px;
-  border-top: 1px dotted red;
+.nonactive {
+  color: black;
+  background-color: #edefeb;
 }
